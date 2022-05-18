@@ -13,9 +13,9 @@ Pictures from different classes have different backgrounds and objects. And diff
 ## Build and train the model
   [Example code](https://colab.research.google.com/drive/1sIT6aaDG9MzmKsCrjTWD5SOsSGE1m9lg?usp=sharing)  
   ![Alt text](https://github.com/cheee123/Rubik-classification/filesneeded.jpg?raw=true "The files in Colab directory")  
-  I trained the models using Google Colab Pro because the free version is not enough RAM for training (I know there is a technique which says not to train all the data at the same time, but I want to make things simple). I use the MobileNet pre-trained model because of its small memory cost, then connect it to a Dropout layer and a Dense layer. Hyperparameters are fine-tuned to achieve best accuracy. The special thing is my method of training, and here are the steps:  
+  I trained the models using Google Colab Pro because the free version is not enough RAM for training (I know there is a technique which says not to train all the data at the same time, but I want to make things simple). I use the MobileNetV2 pre-trained model because of its small memory cost, then connect it to a Dropout layer and a Dense layer. Hyperparameters are fine-tuned to achieve best accuracy. The special thing is my method of training, and here are the steps:  
     1. Only train the Dense layer (as many resources on the Internet recommend to, but most of them have no further step). Then when it starts to overfit (no improvement on val_accuracy after 3 epochs), stop the training process (automatically).  
-    2. Let the Dense layer untrainable, then train the MobileNet until overfitting happens (like the first step).  
+    2. Let the Dense layer untrainable, then train the MobileNetV2 until overfitting happens (like the first step).  
     3. Train all layers.  
   After doing these three steps, I usually get an accuracy of above 98% on testing data.  
   
