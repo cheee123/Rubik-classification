@@ -33,7 +33,7 @@ I trained the models using Google Colab Pro because the free version is not enou
 ## Things to do on Raspberry Pi
 *I did not put my trained models into the On_RaspberryPi folder because of the limitation of Github storage, and also my app only works if your cube looks similar to mine (it's hard to collect this kind of dataset). I am sorry to say that if you want to try this out with your own cube, you can only train the models yourself. If you are interested in how I build the whole app, I have provided the code, you can take it as a reference.*  
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Install Tensorflow and OpenCV (I learned from [here](https://www.youtube.com/watch?v=QLZWQlg-Pk0&list=PLlD0XVjVhLaKWQxzuwQgQlkgimoNhCoHw))  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Install Tensorflow and OpenCV (which I learned from [here](https://www.youtube.com/watch?v=QLZWQlg-Pk0&list=PLlD0XVjVhLaKWQxzuwQgQlkgimoNhCoHw))  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. Download the trained models (.h5 file)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Write Python code to take images by button, preprocess the images, then predict one by one  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. Translate the results to rubik_solver requires format  
@@ -49,15 +49,13 @@ Below are the screenshots from RaspberryPi after power-on and warming for about 
 <p align="center">
   <img src="./images/gui0.jpg" />
   <img src="./images/gui1.jpg" />
+  <img src="./images/gui2.jpg" />
+  <img src="./images/gui3.jpg" />
+  <img src="./images/gui4.jpg" />
+  <img src="./images/gui5.jpg" />
+  <img src="./images/gui6.jpg" />
+  <img src="./images/gui7.jpg" />
+  <img src="./images/gui8.jpg" />
+  <img src="./images/gui9.jpg" />
+  <img src="./images/gui10.jpg" />
 </p>
-![Alt text](./images/gui0.jpg)  
-![Alt text](./images/gui1.jpg)  
-![Alt text](./images/gui2.jpg)  
-![Alt text](./images/gui3.jpg)  
-![Alt text](./images/gui4.jpg)  
-![Alt text](./images/gui5.jpg)  
-![Alt text](./images/gui6.jpg)  
-![Alt text](./images/gui7.jpg)  
-![Alt text](./images/gui8.jpg)  
-![Alt text](./images/gui9.jpg)  
-![Alt text](./images/gui10.jpg?raw=true)  
