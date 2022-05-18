@@ -8,24 +8,23 @@
   The problem is split into two parts, first is how to train the model and second is how to build the app on Raspberry Pi.
 
 ## Dataset
-  Training, Validation and Testing data are 10000, 2000, 1800 pictures each. Most pictures are taken from PiCamera and some are from my phone. My definition of Rubik's cube front view is the White center at Up, Red center at Front and Blue center at Right, the back view is oppsite diagonally, which you can see from the picture above. Because the views are fixed, the amount of front and back pictures are the same and no other view is taken. Pictures from different class have different background and objects, and also different angles, brightnesses, positions,... are applied while taking picture too. Finally, the training data are augmented (see code below), all is for reducing overfitting.
+  Training, Validation and Testing data are 10000, 2000, 1800 pictures each. Most pictures are taken from PiCamera and some are from my phone. My definition of Rubik's cube front view is the White center at Up, Red center at Front and Blue center at Right, the back view is oppsite diagonally, which you can see from the picture above. Because the views are fixed, the amount of front and back pictures are the same and no other view is taken. Pictures from different classes have different backgrounds and objects, and also different angles, brightnesses, positions,... are applied while taking picture too. Finally, the training data are augmented (see code below), all is for reducing overfitting.
 
 ## Build and train the model
   [Example code](https://colab.research.google.com/drive/1sIT6aaDG9MzmKsCrjTWD5SOsSGE1m9lg?usp=sharing)
   ![Alt text](https://github.com/cheee123/Rubik-classification/filesneeded.jpg?raw=true "The files in Colab directory")
-  I trained the models using Google Colab Pro because the free version is not enough RAM for training (I know there is a technique which says not to train all the data at the same time, but I want to make things simple). I used the MobileNet pre-trained model because of its small memory cost. Then connect it to a Dropout layer and a Dense layer. Hyperparameters are fine-tuned as usual. The special thing is my method of training, and here are the steps:
+  I trained the models using Google Colab Pro because the free version is not enough RAM for training (I know there is a technique which says not to train all the data at the same time, but I want to make things simple). I use the MobileNet pre-trained model because of its small memory cost. Then connect it to a Dropout layer and a Dense layer. Hyperparameters are fine-tuned as usual. The special thing is my method of training, and here are the steps:
     1. Only train the Dense layer (as many resources on the Internet recommend to, but most of them have no further step). Then when it starts to overfit (no improvement on val_accuracy after 3 epochs), stop the training process (automatically).
     2. Let the Dense layer untrainable, then train the MobileNet until overfitting happens (like the first step).
     3. Train all layers.
   After doing these three steps, I usually get an accuracy of above 98% on testing data.
   
 ## Things to do on Raspberry Pi
-![Alt text](https://github.com/cheee123/Rubik-classification/filesneeded.jpg?raw=true "The files in Colab directory")
+![Alt text](https://github.com/cheee123/Rubik-classification/filesneeded.jpg?raw=true "The hardware needed")
 
-*I assume that you have install OS, enable PiCamera, and know the Python code to use it.*
   1. Install Tensorflow and OpenCV (I learned it from [here](https://www.youtube.com/watch?v=QLZWQlg-Pk0&list=PLlD0XVjVhLaKWQxzuwQgQlkgimoNhCoHw))
   2. Download the trained models (.h5 file)
-  3. Write code to take picture by button, 
-  4. And I built the app almost by using OpenCV
-  
-  you can take mine as reference, but I think searching from the Internet would be much more efficient.
+  3. Write code to take images by button, preprocess the images, then predict one by one.
+  4. Translate the results to rubik_solver requires format.
+  5. Build the GUI (I do this almost by using OpenCV)
+*I did provide the code in On_RaspberryPi folder, you can take it as reference but I think searching from the Internet would be much more efficient*
