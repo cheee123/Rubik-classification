@@ -12,7 +12,7 @@ My goal is to train many models, each one can detect a single block color on the
 
 
 ## Dataset
-Training, Validation and Testing data are 10000, 2000, 1800 pictures each. Most pictures are taken from PiCamera and some are from my phone. My definition of Rubik's cube front view is the White center at Up, Red center at Front and Blue center at Right, the back view is oppsite diagonally, which you can see from the picture above. Because the views are fixed, the amount of front and back pictures are the same and no other view is taken. And for the same reason, the number of models needed is 24 (not including the centers color). 
+[Training](https://drive.google.com/file/d/1wu1Zga3awv6pgdmGr6NDR4-DKXxzwamr/view?usp=sharing), [Validation](https://drive.google.com/file/d/1gzIa1JyBIEVxRf4sHn2CRQTp2M8CjzbN/view?usp=sharing) and [Testing](https://drive.google.com/file/d/1-0V9G07sqnaycZeYzkh3njxrEkhWmYL2/view?usp=sharing) data are 10000, 2000, 1800 pictures each. Most pictures are taken from PiCamera and some are from my phone. My definition of Rubik's cube front view is the White center at Up, Red center at Front and Blue center at Right, the back view is oppsite diagonally, which you can see from the picture above. Because the views are fixed, the amount of front and back pictures are the same and no other view is taken. And for the same reason, the number of models needed is 24 (not including the centers color). 
 
 Pictures from different classes have different backgrounds and objects. And different angles, brightnesses, positions,... are applied while taking pictures. Moreover, the training data are augmented (see code below), all is for reducing overfitting.  
 ## Build and train the model
