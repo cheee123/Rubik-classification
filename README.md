@@ -4,7 +4,9 @@
 
 ## Introduction
 My goal is to train many models, each one can detect a single block color on the Rubik's cube. Then with the prediction results, I give it to the rubik_solver module (link from [here](https://pypi.org/project/rubik-solver/)) to get a near optimal solution, and then show it to the screen so that any user can solve the cube within 26 moves. All they have to do is just click the Next button, take 2 images, and wait for the result.  
-  ![Alt text](https://github.com/cheee123/Rubik-classification/images/concept.jpg?raw=true "The final result")  
+<p align="center">
+  <img src="./images/concept.jpg "The final result"" />
+</p> 
 The problem is split into two parts, first is how to train the model and second is how to build the app on Raspberry Pi.  
 
 ## Dataset
@@ -12,8 +14,9 @@ Training, Validation and Testing data are 10000, 2000, 1800 pictures each. Most 
 
 Pictures from different classes have different backgrounds and objects. And different angles, brightnesses, positions,... are applied while taking picture. Moreover, the training data are augmented (see code below), all is for reducing overfitting.  
 ## Build and train the model
-  [Example code](https://colab.research.google.com/drive/1sIT6aaDG9MzmKsCrjTWD5SOsSGE1m9lg?usp=sharing)  
-  ![Alt text](https://github.com/cheee123/Rubik-classification/images/filesneeded.jpg?raw=true "The files in Colab directory")  
+  [Python training code on Colab notebook](https://colab.research.google.com/drive/1sIT6aaDG9MzmKsCrjTWD5SOsSGE1m9lg?usp=sharing)  
+  ![](./images/filesneededtotrain.jpg "The files in Colab directory")  
+  *The files in Colab main directory*  
   I trained the models using Google Colab Pro because the free version is not enough RAM for training (I know there is a technique which says not to train all the data at the same time, but I want to make things simple). I use the MobileNetV2 pre-trained model because of its small memory cost, then connect it to a Dropout layer and a Dense layer. Hyperparameters are fine-tuned to achieve best accuracy. The special thing is my method of training, and here are the steps:  
 &nbsp;&nbsp;&nbsp;&nbsp;1. Only train the Dense layer (as many resources on the Internet recommend to, but most of them have no further step). Then when it starts to overfit (no improvement on val_accuracy after 3 epochs), stop the training process (automatically).  
 &nbsp;&nbsp;&nbsp;&nbsp;2. Let the Dense layer untrainable, then train the MobileNetV2 until overfitting happens (like the first step).  
@@ -28,18 +31,17 @@ Pictures from different classes have different backgrounds and objects. And diff
 &nbsp;&nbsp;&nbsp;&nbsp;3. Write Python code to take images by button, preprocess the images, then predict one by one  
 &nbsp;&nbsp;&nbsp;&nbsp;4. Translate the results to rubik_solver requires format  
 &nbsp;&nbsp;&nbsp;&nbsp;5. Build the GUI (I do this almost by using OpenCV)  
- 
-![Alt text](https://github.com/cheee123/Rubik-classification/images/filesneeded.jpg?raw=true "The hardware I used")  
-
+![](./images/hardware.jpg "The hardware I used")  
+*The hardware I used*  
 ## Results  
-![Alt text](https://github.com/cheee123/Rubik-classification/images/gui0.jpg?raw=true)  
-![Alt text](https://github.com/cheee123/Rubik-classification/images/gui1.jpg?raw=true)  
-![Alt text](https://github.com/cheee123/Rubik-classification/images/gui2.jpg?raw=true)  
-![Alt text](https://github.com/cheee123/Rubik-classification/images/gui3.jpg?raw=true)  
-![Alt text](https://github.com/cheee123/Rubik-classification/images/gui4.jpg?raw=true)  
-![Alt text](https://github.com/cheee123/Rubik-classification/images/gui5.jpg?raw=true)  
-![Alt text](https://github.com/cheee123/Rubik-classification/images/gui6.jpg?raw=true)  
-![Alt text](https://github.com/cheee123/Rubik-classification/images/gui7.jpg?raw=true)  
-![Alt text](https://github.com/cheee123/Rubik-classification/images/gui8.jpg?raw=true)  
-![Alt text](https://github.com/cheee123/Rubik-classification/images/gui9.jpg?raw=true)  
-![Alt text](https://github.com/cheee123/Rubik-classification/images/gui10.jpg?raw=true)  
+![Alt text](./images/gui0.jpg)  
+![Alt text](./images/gui1.jpg)  
+![Alt text](./images/gui2.jpg)  
+![Alt text](./images/gui3.jpg)  
+![Alt text](./images/gui4.jpg)  
+![Alt text](./images/gui5.jpg)  
+![Alt text](./images/gui6.jpg)  
+![Alt text](./images/gui7.jpg)  
+![Alt text](./images/gui8.jpg)  
+![Alt text](./images/gui9.jpg)  
+![Alt text](./images/gui10.jpg?raw=true)  
