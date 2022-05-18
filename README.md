@@ -30,3 +30,5 @@ Pictures from different classes have different backgrounds and objects. And diff
 &nbsp;&nbsp;&nbsp;&nbsp;5. Build the GUI (I do this almost by using OpenCV)  
  
 ![Alt text](https://github.com/cheee123/Rubik-classification/filesneeded.jpg?raw=true "The hardware I used")  
+
+## Results  
