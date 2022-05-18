@@ -18,9 +18,11 @@ models = []
 for i in range (24):
   models.append(keras.models.load_model('./rubik_MobileNet_p{}.h5'.format(i)))
 
-#Warm up keras model
+#Warm up models
 rubikpic = np.load('./rubikpic_random.npy') # A random rubik's cube image
-rubikpic = models[0].predict(rubikpic)
+for i in range (24):
+  p = models[i].predict(rubikpic)
+  del p
 del rubikpic
 
 #Main window
