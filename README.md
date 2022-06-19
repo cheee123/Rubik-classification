@@ -16,7 +16,7 @@ My goal is to train many models, each one can detect a single block color on the
 
 Pictures from different classes have different backgrounds and objects. And different angles, brightnesses, positions,... are applied while taking pictures. Moreover, the training data are augmented (see code below), all is for reducing overfitting.  
 ## Build and train the model
-  [Python training code on Colab notebook](https://colab.research.google.com/drive/1sIT6aaDG9MzmKsCrjTWD5SOsSGE1m9lg?usp=sharing)  
+  [Python training code on Colab notebook](https://colab.research.google.com/drive/15tp3d3jr1LQ9MB58lhzv8CFywI9VQeos?usp=sharing)  
  
 <p align="center">
   <img src="./images/filesneededtotrain.jpg "The files in Colab directory"" />
