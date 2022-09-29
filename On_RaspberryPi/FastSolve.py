@@ -1,28 +1,42 @@
 #I have set my Raspberry Pi to auto-run this script when power on
 import cv2
 import numpy as np
-import keras
+import tensorflow as tf
 from keras.applications.mobilenet_v2 import preprocess_input
-from gpiozero import Button
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
+import RPi.GPIO as GPIO
 from DrawRubik import draw_rubik
 from DrawRubik import draw_arrow
 from DrawRubik import nextview
 from rubik_solver import utils
+import time
 
 #Set buttons
-Next = Button(17) #GPIO
-Back = Button(18) #GPIO
+Next = 17 #GPIO17
+Back = 18 #GPIO18
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(Next, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(Back, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 #Load all models
-models = []
-for i in range (24):
-  models.append(keras.models.load_model('./rubik_MobileNet_p{}.h5'.format(i)))
+interpreter = []
+input_details = []
+output_details = []
+for i in range(24):
+  interpreter.append(tf.lite.Interpreter(model_path="./rubik_MobileNet_p{}.tflite".format(i)))
+  interpreter[i].allocate_tensors()
+  input_details.append(interpreter[i].get_input_details())
+  output_details.append(interpreter[i].get_output_details())
 
 #Warm up models
 rubikpic = np.load('./rubikpic_random.npy') # A random rubik's cube image
-for i in range (24):
-  p = models[i].predict(rubikpic)
-  del p
+for i in range (1):
+  interpreter[i].set_tensor(input_details[i][0]['index'], rubikpic)
+  interpreter[i].invoke()
+  pred = interpreter[i].get_tensor(output_details[i][0]['index'])[0]
+  pred_class = np.argmax(pred)
+  del pred_class
 del rubikpic
 
 #Main window
@@ -32,6 +46,7 @@ cv2.setWindowProperty(winname, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN) #
 
 #Test camera
 cap = cv2.VideoCapture(0)
+time.sleep(2)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 256)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 256)
 ret, frame = cap.read()
@@ -42,12 +57,12 @@ except:
   img = cv2.imread('./camera_error.jpg')
   cv2.imshow(winname, img)                 #On the PiCamera there is a yellow thing called Sunny, and my Sunny is very fragile 
   while True:
-    if(cv2.waitKey(50) & Next.is_pressed): #if Next button is pressed
+    if(cv2.waitKey(50) & (GPIO.input(Next) == GPIO.LOW)): #if Next button is pressed
       from subprocess import call
       call("sudo poweroff", shell=True)    #poweroff is the only way to fix
       break
       
-#Prepare
+#Preparing
 welcome = cv2.imread('./welcome.jpg')
 ori = cv2.imread('./rubikpic_ori.jpg')
 solved_state = 'yyyyyyyyybbbbbbbbbrrrrrrrrrgggggggggooooooooowwwwwwwww'
@@ -63,13 +78,18 @@ state = 0
 #Main Loop
 while True:
   #Before step into any state
-  Back.wait_for_release()
-  Next.wait_for_release()
+  if(GPIO.input(Next) == GPIO.LOW):
+    GPIO.wait_for_edge(Next, GPIO.RISING) #wait for release
+    pass
+  if(GPIO.input(Back) == GPIO.LOW):
+    GPIO.wait_for_edge(Back, GPIO.RISING)
+    pass
+
   if(state==0):
     #Show welcome
     cv2.imshow(winname,welcome)
     while True:
-      if(cv2.waitKey(50) & Next.is_pressed): #check per 50ms
+      if(cv2.waitKey(50) & (GPIO.input(Next) == GPIO.LOW)): #check per 50ms
         state = 1
         break
   elif(state==1):
@@ -81,16 +101,20 @@ while True:
       cv2.putText(img,'Take a picture from front view',(60,480),font,0.8,(10,240,240),2,cv2.LINE_AA)
       cv2.imshow(winname, img)
       
-      if(cv2.waitKey(1) & Back.is_pressed):
+      if(cv2.waitKey(1) & (GPIO.input(Back) == GPIO.LOW)):
         state = 0
         break
-      elif(cv2.waitKey(1) & Next.is_pressed): #predicting
+      elif(cv2.waitKey(1) & (GPIO.input(Next) == GPIO.LOW)): #predicting
         td = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         td = preprocess_input(td)
         td = np.array([td])
         color_front = np.zeros(24,np.uint8)
         for i in range(24): #Use models to predict
-          color_front[i] = np.argmax(models[i].predict(td))
+          interpreter[i].set_tensor(input_details[i][0]['index'], td)
+          interpreter[i].invoke()
+          pred = interpreter[i].get_tensor(output_details[i][0]['index'])[0]
+          pred_class = np.argmax(pred)
+          color_front[i] = pred_class
         state = 2
         break
   elif(state==2):
@@ -100,10 +124,10 @@ while True:
     cv2.putText(img,'Please check',(150,480),font,1,(128,20,20),2,cv2.LINE_AA)
     cv2.imshow(winname,img)
     while True:
-      if(cv2.waitKey(25) & Back.is_pressed):
+      if(cv2.waitKey(25) & (GPIO.input(Back) == GPIO.LOW)):
         state = 1
         break
-      elif(cv2.waitKey(25) & Next.is_pressed):
+      elif(cv2.waitKey(25) & (GPIO.input(Next) == GPIO.LOW)):
         state = 3
         break
   elif(state==3):
@@ -114,16 +138,20 @@ while True:
       img = cv2.resize(img,(512,512))
       cv2.putText(img,'Take a picture from back view',(60,480),font,0.8,(10,240,240),2,cv2.LINE_AA)
       cv2.imshow(winname, img)
-      if(cv2.waitKey(1) & Back.is_pressed):
+      if(cv2.waitKey(1) & (GPIO.input(Back) == GPIO.LOW)):
         state = 2
         break
-      elif(cv2.waitKey(1) & Next.is_pressed): #predicting
+      elif(cv2.waitKey(1) & (GPIO.input(Next) == GPIO.LOW)): #predicting
         td = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         td = preprocess_input(td)
         td = np.array([td])
         color_back = np.zeros(24,np.uint8)
         for i in range(24): #Use models to predict
-          color_back[i] = np.argmax(models[i].predict(td))
+          interpreter[i].set_tensor(input_details[i][0]['index'], td)
+          interpreter[i].invoke()
+          pred = interpreter[i].get_tensor(output_details[i][0]['index'])[0]
+          pred_class = np.argmax(pred)
+          color_back[i] = pred_class
         state = 4
         break
   elif(state==4):
@@ -133,10 +161,10 @@ while True:
     cv2.putText(img,'Please check',(150,480),font,1,(128,20,20),2,cv2.LINE_AA)
     cv2.imshow(winname,img)
     while True:
-      if(cv2.waitKey(25) & Back.is_pressed):
+      if(cv2.waitKey(25) & (GPIO.input(Back) == GPIO.LOW)):
         state = 3
         break
-      elif(cv2.waitKey(25) & Next.is_pressed):
+      elif(cv2.waitKey(25) & (GPIO.input(Next) == GPIO.LOW)):
         img = np.copy(ori)
         cv2.putText(img,'Please wait...',(160,480),font,1,(128,20,20),2,cv2.LINE_AA)
         cv2.imshow(winname,img)
@@ -160,7 +188,7 @@ while True:
       cv2.putText(img,'Solved!',(205,480),font,1,(128,20,20),2,cv2.LINE_AA)
       cv2.imshow(winname,img)
       while True:
-        if(cv2.waitKey(50) & Next.is_pressed):
+        if(cv2.waitKey(50) & (GPIO.input(Next) == GPIO.LOW)):
           state = 0
           break
     else:
@@ -180,10 +208,10 @@ while True:
         cv2.putText(img,'Ready!',(205,480),font,1,(128,20,20),2,cv2.LINE_AA)
         cv2.imshow(winname,img)
         while True:
-          if(cv2.waitKey(25) & Back.is_pressed):
+          if(cv2.waitKey(25) & (GPIO.input(Back) == GPIO.LOW)):
             state = 4
             break
-          elif(cv2.waitKey(25) & Next.is_pressed):
+          elif(cv2.waitKey(25) & (GPIO.input(Next) == GPIO.LOW)):
             state = 6
             break
       except:
@@ -191,10 +219,10 @@ while True:
         cv2.putText(img,'There is something wrong!',(90,480),font,0.8,(20,20,128),2,cv2.LINE_AA) #maybe mis-predicted
         cv2.imshow(winname,img)
         while True:
-          if(cv2.waitKey(25) & Back.is_pressed):
+          if(cv2.waitKey(25) & (GPIO.input(Back) == GPIO.LOW)):
             state = 4
             break
-          elif(cv2.waitKey(25) & Next.is_pressed):
+          elif(cv2.waitKey(25) & (GPIO.input(Next) == GPIO.LOW)):
             state = 0
             break
   elif(state==6):
@@ -232,19 +260,21 @@ while True:
         img = draw_arrow(img, str(ans_real[step]))
       cv2.imshow(winname,img)
       while True:
-        if(cv2.waitKey(25) & Back.is_pressed):
+        if(cv2.waitKey(25) & (GPIO.input(Back) == GPIO.LOW)):
           if(step==0):
             state = 4 #Back to state 4, not 5
             change_state = True
           else:
             step -= 1
-          Back.wait_for_release()
+          if(GPIO.input(Back) == GPIO.LOW):
+            GPIO.wait_for_edge(Back, GPIO.RISING)
           break
-        elif(cv2.waitKey(25) & Next.is_pressed):
+        elif(cv2.waitKey(25) & (GPIO.input(Next) == GPIO.LOW)):
           if(step==last_step):
             state = 0
             change_state = True
           else:
             step += 1
-          Next.wait_for_release()
+          if(GPIO.input(Next) == GPIO.LOW):
+            GPIO.wait_for_edge(Next, GPIO.RISING)
           break
