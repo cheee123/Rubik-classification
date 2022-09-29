@@ -1,4 +1,4 @@
-#Some helper functions
+#Some helper functions 
 import numpy as np
 import cv2
 color = [(230,224,208),(180,92,20),(37,27,158),(17,190,192),(13,153,27),(21,91,200),(85,85,85)]
