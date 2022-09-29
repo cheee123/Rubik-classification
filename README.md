@@ -3,12 +3,12 @@
 **This is my school project and also my first project to train a deep learning model. As a beginner, I just want to share how I trained the model to help other beginners like me. And I am not sure whether my method is considered good but it works well with my own dataset. So, if you get stuck with a similar application, you may give it a try. Any comments or suggestions are welcome.*
 
 ## Introduction
-My goal is to train many models, each one can detect a single block color on the Rubik's cube (I know this is not a good idea, but I really want to try out). Then with the prediction results, I give it to the rubik_solver module (link from [here](https://pypi.org/project/rubik-solver/)) to get a near optimal solution, and then show it to the screen so that any user can solve the cube within 26 moves. All they have to do is just click the Next button, take 2 images, and wait for the result. The problem is split into two parts, first is how to train the model and second is how to build an auto-running app on Raspberry Pi.  
+My goal is to train many models, each one can detect a single block color on the Rubik's cube, then with the prediction results, I give it to the rubik_solver module (link from [here](https://pypi.org/project/rubik-solver/)) to get a near optimal solution, and then show it to the screen so that any user can solve the cube within 26 moves. All they have to do is just click the Next button, take 2 images, and wait for the result. The problem is split into two parts, first is how to train the model and second is how to build an auto-running app on Raspberry Pi.  
 <p align="center">
   <img src="./images/concept.jpg "The final result"" />
 </p>  
 
-**It takes about 9 seconds for predicting an image (step 1 to step 2), which is not a very good performance*  
+**It takes about 1 seconds for predicting an image (step 1 to step 2)*  
 
 
 ## Dataset
