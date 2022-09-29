@@ -24,7 +24,7 @@ Pictures from different classes have different backgrounds and objects. And diff
   
 <h5 align="center">*The files in Colab main directory</h1>  
   
-I trained the models using Google Colab Pro because the free version is not enough RAM for training (I know there is a technique which says not to train all the data at the same time, but I want to make things simple). I use the MobileNetV2 pre-trained model because of its small memory cost, then connect it to a Dropout layer and a Dense layer. Hyperparameters are fine-tuned to achieve best accuracy. The special thing is my method of training, and here are the steps:  
+I trained the models using Google Colab Pro because the free version is not enough RAM for training. I used the MobileNetV2 pre-trained model because of its small memory cost, then connected it to a Dropout layer and a Dense layer. Hyperparameters are fine-tuned to achieve best accuracy. The special thing is my method of training, and here are the steps:  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Only train the Dense layer (as many resources on the Internet recommend to, but most of them have no further step). Then when it starts to overfit (no improvement on val_accuracy after 3 epochs), stop the training process (automatically).  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. Let the Dense layer untrainable, then train the MobileNetV2 until overfitting happens (like the first step).  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Train all layers.  
@@ -33,7 +33,7 @@ I trained the models using Google Colab Pro because the free version is not enou
 ## Things to do on Raspberry Pi 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Install Tensorflow and OpenCV (which I learned from [here](https://www.youtube.com/watch?v=QLZWQlg-Pk0&list=PLlD0XVjVhLaKWQxzuwQgQlkgimoNhCoHw))  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. Download the trained models (.h5 file)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. Download the trained models (.tflite file)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Write Python code to take images by button, preprocess the images, then predict one by one  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. Translate the results to rubik_solver requires format  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5. Build the GUI (I do this almost by using OpenCV)  
@@ -43,7 +43,7 @@ I trained the models using Google Colab Pro because the free version is not enou
 <h5 align="center">*The hardware I used</h1>
 
 ## Results  
-Below are the screenshots from RaspberryPi after power-on and warming for about 8 minutes  
+Below are the screenshots from RaspberryPi after power-on and warming up for a minute  
   
 <p align="center">
   <img src="./images/gui0.jpg" />
