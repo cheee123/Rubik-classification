@@ -29,16 +29,6 @@ for i in range(24):
   input_details.append(interpreter[i].get_input_details())
   output_details.append(interpreter[i].get_output_details())
 
-#Warm up models
-rubikpic = np.load('./rubikpic_random.npy') # A random rubik's cube image
-for i in range (1):
-  interpreter[i].set_tensor(input_details[i][0]['index'], rubikpic)
-  interpreter[i].invoke()
-  pred = interpreter[i].get_tensor(output_details[i][0]['index'])[0]
-  pred_class = np.argmax(pred)
-  del pred_class
-del rubikpic
-
 #Main window
 winname = 'FastSolve'
 cv2.namedWindow(winname,cv2.WND_PROP_FULLSCREEN)
