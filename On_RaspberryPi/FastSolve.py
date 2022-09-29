@@ -1,4 +1,4 @@
-#I have set my Raspberry Pi to auto-run this script when power on
+#I have set my Raspberry Pi to auto-run this script when power on 
 import cv2
 import numpy as np
 import tensorflow as tf
