@@ -30,8 +30,7 @@ I trained the models using Google Colab Pro because the free version is not enou
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Train all layers.  
   After doing these three steps, I usually get an accuracy of above 98% on testing data.  
   
-## Things to do on Raspberry Pi
-*I did not put my trained models into the On_RaspberryPi folder because of the limitation of Github storage, and also my app only works if your cube looks similar to mine (it's hard to collect this kind of dataset). I am sorry to say that if you want to try this out with your own cube, you can only train the models yourself. If you are interested in how I build the whole app, I have provided the code, you can take it as a reference.*  
+## Things to do on Raspberry Pi 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Install Tensorflow and OpenCV (which I learned from [here](https://www.youtube.com/watch?v=QLZWQlg-Pk0&list=PLlD0XVjVhLaKWQxzuwQgQlkgimoNhCoHw))  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. Download the trained models (.h5 file)  
